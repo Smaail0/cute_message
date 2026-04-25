@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>I Love You - Interactive</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500&display=swap');
+
+        :root {
+            --pink-light: #ffdeeb;
+            --pink-main: #ff85a1;
+            --pink-dark: #f6416c;
+            --heart-color: #ff4d6d;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ffdeeb 0%, #ffe0ec 100%);
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .background-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .falling-heart {
+            position: absolute;
+            opacity: 0.6;
+            animation: fall linear infinite;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            padding: 20px;
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 8vw, 3rem);
+            color: var(--pink-dark);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            word-wrap: break-word;
+        }
+
+        .button-container {
+            margin: 30px 0;
+            padding: 0 10px;
+        }
+
+        .magic-button {
+            background: linear-gradient(135deg, #ff85a1, #f6416c);
+            color: white;
+            border: none;
+            padding: clamp(15px, 4vw, 18px) clamp(30px, 8vw, 40px);
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Dancing Script', cursive;
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.4);
+            transition: all 0.3s ease;
+            user-select: none;
+            position: relative;
+            z-index: 11;
+            touch-action: manipulation;
+            -webkit-appearance: none;
+            appearance: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .magic-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(255, 77, 109, 0.6);
+        }
+
+        .magic-button:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            .magic-button:active {
+                transform: scale(0.9);
+            }
+        }
+
+        /* Popping Text Animation */
+        .popping-text {
+            position: fixed;
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 10vw, 4rem);
+            font-weight: bold;
+            color: var(--heart-color);
+            pointer-events: none;
+            z-index: 100;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            animation: popAndFade 2s ease-out forwards;
+        }
+
+        @keyframes popAndFade {
+            0% {
+                transform: scale(0) rotate(-20deg);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2) rotate(10deg);
+            }
+            100% {
+                transform: scale(0.5) translateY(-100px) rotate(20deg);
+                opacity: 0;
+            }
+        }
+
+        /* Flower Animation */
+        .flower {
+            position: fixed;
+            font-size: clamp(1.5rem, 8vw, 2.5rem);
+            pointer-events: none;
+            z-index: 99;
+            animation: flowerFloat 3s ease-out forwards;
+        }
+
+        @keyframes flowerFloat {
+            0% {
+                transform: translateY(0) translateX(0) scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-300px) translateX(var(--tx)) scale(0.3) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Continuous Popping Hearts */
+        .pop-heart {
+            position: fixed;
+            font-size: clamp(1.5rem, 6vw, 2rem);
+            pointer-events: none;
+            z-index: 50;
+            animation: heartPop 1.5s ease-out forwards;
+        }
+
+        @keyframes heartPop {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.3);
+            }
+            100% {
+                transform: scale(0) translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        .subtitle {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            color: #666;
+            margin-top: 10px;
+            position: relative;
+            z-index: 11;
+            word-wrap: break-word;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                height: 100dvh;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                margin: 15px 0;
+            }
+
+            .button-container {
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-hearts" id="backgroundHearts"></div>
+
+    <div class="container">
+        <h1>✨ I Love You ✨</h1>
+        <p class="subtitle">Click the button to see the magic!</p>
+        <div class="button-container">
+            <button class="magic-button" ontouchstart="handleTouchStart(event)" onclick="triggerMagic()">💖 Click Me! 💖</button>
+        </div>
+    </div>
+
+    <script>
+        // Phrases in different languages
+        const phrases = [
+            { text: "I Love You", emoji: "❤️" },
+            { text: "Je t'aime", emoji: "🌹" },
+            { text: "Te amo", emoji: "🌺" },
+            { text: "Ti amo", emoji: "🌸" },
+            { text: "Ich liebe dich", emoji: "💐" },
+            { text: "愛してる", emoji: "🌼" },
+            { text: "사랑해", emoji: "🌻" },
+            { text: "我爱你", emoji: "🌷" },
+            { text: "Eu te amo", emoji: "💕" },
+            { text: "Я тебя люблю", emoji: "💗" }
+        ];
+
+        const flowers = ["🌹", "🌺", "🌸", "💐", "🌼", "🌻", "🌷", "🏵️", "🌾"];
+        const hearts = ["❤️", "💖", "💗", "💓", "💕", "💞", "💘"];
+
+        // Touch start handler for better mobile feedback
+        function handleTouchStart(event) {
+            event.preventDefault();
+        }
+
+        // Create falling hearts background
+        function createFallingHeart() {
+            const backgroundHearts = document.getElementById('backgroundHearts');
+            if (!backgroundHearts) return;
+
+            const heart = document.createElement('div');
+            heart.classList.add('falling-heart');
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            
+            const randomX = Math.random() * 100;
+            const randomDuration = Math.random() * 5 + 8;
+            const randomSize = Math.random() * 1.5 + 0.8;
+            const randomDelay = Math.random() * 2;
+
+            heart.style.left = randomX + '%';
+            heart.style.animationDuration = randomDuration + 's';
+            heart.style.fontSize = (2 * randomSize) + 'rem';
+            heart.style.animationDelay = randomDelay + 's';
+
+            backgroundHearts.appendChild(heart);
+
+            setTimeout(() => {
+                if (heart.parentNode) {
+                    heart.remove();
+                }
+            }, (randomDuration + randomDelay) * 1000);
+        }
+
+        // Start continuous falling hearts
+        function startFallingHearts() {
+            setInterval(createFallingHeart, 300);
+        }
+
+        // Continuous popping animation loop
+        function startContinuousPopping() {
+            setInterval(() => {
+                createRandomPop();
+            }, 400);
+        }
+
+        function createRandomPop() {
+            const randomX = Math.random() * window.innerWidth;
+            const randomY = Math.random() * window.innerHeight * 0.5;
+            const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+
+            const popElement = document.createElement('div');
+            popElement.classList.add('pop-heart');
+            popElement.textContent = randomPhrase.emoji;
+            popElement.style.left = randomX + 'px';
+            popElement.style.top = randomY + 'px';
+
+            document.body.appendChild(popElement);
+
+            setTimeout(() => {
+                if (popElement.parentNode) {
+                    popElement.remove();
+                }
+            }, 1500);
+        }
+
+        // Trigger magic on button click
+        function triggerMagic() {
+            const button = document.querySelector('.magic-button');
+            button.style.pointerEvents = 'none';
+
+            // Create multiple "I Love You" texts
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+                    createPoppingText(randomPhrase.text);
+                    createFlowers();
+                }, i * 200);
+            }
+
+            setTimeout(() => {
+                button.style.pointerEvents = 'auto';
+            }, 1500);
+        }
+
+        function createPoppingText(text) {
+            const randomX = Math.random() * (window.innerWidth - 200) + 100;
+            const randomY = Math.random() * (window.innerHeight - 200) + 100;
+
+            const textElement = document.createElement('div');
+            textElement.classList.add('popping-text');
+            textElement.textContent = text;
+            textElement.style.left = randomX + 'px';
+            textElement.style.top = randomY + 'px';
+
+            document.body.appendChild(textElement);
+
+            setTimeout(() => {
+                if (textElement.parentNode) {
+                    textElement.remove();
+                }
+            }, 2000);
+        }
+
+        function createFlowers() {
+            for (let i = 0; i < 8; i++) {
+                const randomX = Math.random() * window.innerWidth;
+                const randomY = Math.random() * window.innerHeight;
+                const flower = flowers[Math.floor(Math.random() * flowers.length)];
+                const tx = (Math.random() - 0.5) * 200;
+
+                const flowerElement = document.createElement('div');
+                flowerElement.classList.add('flower');
+                flowerElement.textContent = flower;
+                flowerElement.style.left = randomX + 'px';
+                flowerElement.style.top = randomY + 'px';
+                flowerElement.style.setProperty('--tx', tx + 'px');
+
+                document.body.appendChild(flowerElement);
+
+                setTimeout(() => {
+                    if (flowerElement.parentNode) {
+                        flowerElement.remove();
+                    }
+                }, 3000);
+            }
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            startFallingHearts();
+            startContinuousPopping();
+        });
+
+        // Handle window resize for responsive updates
+        window.addEventListener('resize', () => {
+            // Recalculate positions if needed
+        });
+    </script>
+</body>
+</html>
