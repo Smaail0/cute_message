@@ -128,30 +128,25 @@
         .popping-text {
             position: fixed;
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(2.5rem, 12vw, 5rem);
+            font-size: clamp(2rem, 10vw, 4rem);
             font-weight: bold;
             color: var(--heart-color);
             pointer-events: none;
-            z-index: 200;
-            text-shadow: 0 0 20px rgba(255, 77, 109, 0.8), 2px 2px 8px rgba(0,0,0,0.3);
+            z-index: 100;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
             animation: popAndFade 2s ease-out forwards;
-            white-space: nowrap;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            line-height: 1;
         }
 
         @keyframes popAndFade {
             0% {
-                transform: translate(-50%, -50%) scale(0) rotate(-20deg);
+                transform: scale(0) rotate(-20deg);
                 opacity: 1;
             }
             50% {
-                transform: translate(-50%, -50%) scale(1.3) rotate(10deg);
+                transform: scale(1.2) rotate(10deg);
             }
             100% {
-                transform: translate(-50%, calc(-50% - 100px)) scale(0.5) rotate(20deg);
+                transform: scale(0.5) translateY(-100px) rotate(20deg);
                 opacity: 0;
             }
         }
@@ -312,7 +307,6 @@
             popElement.textContent = randomPhrase.emoji;
             popElement.style.left = randomX + 'px';
             popElement.style.top = randomY + 'px';
-            popElement.style.transform = 'translate(-50%, -50%)';
 
             document.body.appendChild(popElement);
 
@@ -343,9 +337,14 @@
         }
 
         function createPoppingText(text) {
+            const randomX = Math.random() * (window.innerWidth - 200) + 100;
+            const randomY = Math.random() * (window.innerHeight - 200) + 100;
+
             const textElement = document.createElement('div');
             textElement.classList.add('popping-text');
             textElement.textContent = text;
+            textElement.style.left = randomX + 'px';
+            textElement.style.top = randomY + 'px';
 
             document.body.appendChild(textElement);
 
@@ -368,7 +367,6 @@
                 flowerElement.textContent = flower;
                 flowerElement.style.left = randomX + 'px';
                 flowerElement.style.top = randomY + 'px';
-                flowerElement.style.transform = 'translate(-50%, -50%)';
                 flowerElement.style.setProperty('--tx', tx + 'px');
 
                 document.body.appendChild(flowerElement);
