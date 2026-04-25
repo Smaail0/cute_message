@@ -307,6 +307,7 @@
             popElement.textContent = randomPhrase.emoji;
             popElement.style.left = randomX + 'px';
             popElement.style.top = randomY + 'px';
+            popElement.style.transform = 'translate(-50%, -50%)'; // Center the emoji on the point
 
             document.body.appendChild(popElement);
 
@@ -337,14 +338,25 @@
         }
 
         function createPoppingText(text) {
-            const randomX = Math.random() * (window.innerWidth - 200) + 100;
-            const randomY = Math.random() * (window.innerHeight - 200) + 100;
+            // Calculate safe area for text (centered with padding)
+            const textWidth = 200;
+            const textHeight = 100;
+            const padding = 20;
+            
+            const minX = padding;
+            const maxX = Math.max(padding + textWidth, window.innerWidth - textWidth - padding);
+            const minY = window.innerHeight * 0.2; // Start from 20% down
+            const maxY = window.innerHeight * 0.7; // End at 70% down
+            
+            const randomX = Math.random() * (maxX - minX) + minX;
+            const randomY = Math.random() * (maxY - minY) + minY;
 
             const textElement = document.createElement('div');
             textElement.classList.add('popping-text');
             textElement.textContent = text;
             textElement.style.left = randomX + 'px';
             textElement.style.top = randomY + 'px';
+            textElement.style.transform = 'translate(-50%, -50%)'; // Center the text on the point
 
             document.body.appendChild(textElement);
 
@@ -367,6 +379,7 @@
                 flowerElement.textContent = flower;
                 flowerElement.style.left = randomX + 'px';
                 flowerElement.style.top = randomY + 'px';
+                flowerElement.style.transform = 'translate(-50%, -50%)'; // Center the flower on the point
                 flowerElement.style.setProperty('--tx', tx + 'px');
 
                 document.body.appendChild(flowerElement);
